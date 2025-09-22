@@ -2,19 +2,9 @@ from typing_extensions import TypedDict
 from typing import Annotated
 from pydantic import BaseModel, Field
 from typing import List, Optional
+from typing import Dict
+from gitingest import ingest_async
 
-def update_css_map(a:dict = None,b:dict = None):
-    if not b:
-        return a
-    elif not a:
-        return b
-    else:
-        a.update(b)
-        return a
-
-class CSSState(TypedDict):
-    class_name: str
-    rules: str
 
 class MigrateState(TypedDict):
     source_dir: str
@@ -72,7 +62,6 @@ class PlanStep(BaseModel):
         return "\n".join(lines)
 
 
-
 class Plan(BaseModel):
     checkpoints: List[str] = Field(..., description="Ordered list of checkpoint names")
     steps: List[PlanStep] = Field(..., description="Ordered steps, each with a checkpoint")
@@ -83,40 +72,10 @@ class DoneSchema(BaseModel):
 class RevisedPlanSteps(BaseModel):
     steps: List[PlanStep] = Field(..., description="List of revised or additional PlanSteps for the current checkpoint.")
 
-
-class Plan(BaseModel):
-    checkpoints: List[str] = Field(..., description="Ordered list of checkpoint names")
-    steps: List[PlanStep] = Field(..., description="Ordered steps, each with a checkpoint")
-
-def verbose_migration_state(state: dict) -> str:
-    """
-    Serialize migration state into a verbose, readable format for prompt injection.
-    Includes section headers, file trees, and CSS mappings.
-    """
-    lines = []
-    lines.append(f"=== MIGRATION CONTEXT ===")
-    lines.append(f"SOURCE DIR: {state.get('source_dir','')}")
-    lines.append(f"APP DIR: {state.get('app_dir','')}")
-    lines.append("\n--- SOURCE TREE ---")
-    lines.append(state.get('source_tree','').strip())
-    lines.append("\n--- APP TREE ---")
-    lines.append(state.get('app_tree','').strip())
-    lines.append("\n--- SOURCE CONTEXT ---")
-    lines.append(state.get('source_context','').strip())  # Truncate if huge
-    lines.append("\n--- APP CONTEXT ---")
-    lines.append(state.get('app_context','').strip())
-    lines.append("\n--- CSS CLASS MAPPING ---")
-    css_state = state.get('css_state', {})
-    for k, v in css_state.items():
-        lines.append(f"{k}: {v}")
-    lines.append("\n=========================")
-    return "\n".join(lines)
-
-from typing import Dict
 class PlanExecute(BaseModel):
     migrate_state: Optional[dict] = None
     input: Optional[str] = None
-    plan: Plan
+    plan: Optional[Plan] = None
     past_steps: List[Dict] = Field(default_factory=list)
     response: Optional[str] = None
     current_checkpoint: Optional[str] = None
@@ -153,3 +112,5 @@ class PlanExecute(BaseModel):
             lines.append(f"\n--- RESPONSE ---\n{self.response}")
         lines.append("\n===========================")
         return "\n".join(lines)
+    
+

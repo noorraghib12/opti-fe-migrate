@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 import os
 from openai import OpenAI, AsyncOpenAI
 from asyncio import gather
+import glob
+from gitingest import ingest_async
+from agent.states import MigrateState
 # Set your OpenAI API key here
 load_dotenv()
 
@@ -55,3 +58,37 @@ async def get_tailwind_mapping(class_name, rules):
     except Exception as e:
         print(f"Error for .{class_name}: {e}")
         return []
+    
+    
+def get_css_class_from_files(css_file) -> dict:
+    if isinstance(css_file,str):
+        css_file = [css_file]
+    classes = {}
+    for f in css_file:
+        classes_ = extract_css_classes(f)
+        classes.update(classes_)
+    return classes
+
+
+async def get_css_classes_from_dir(state: MigrateState):
+    state['app_dir'] = os.path.join('target_migrate',os.path.basename(state['source_dir']))
+    os.makedirs(state['app_dir'],exist_ok=True)
+    
+    files = glob.glob(os.path.join(state['source_dir'],'**','*.css'),recursive=True)
+    classes = get_css_class_from_files(files)
+    tasks = []
+    for class_name,rules in classes.items():
+        tw_classes = get_tailwind_mapping(class_name, rules)
+        tasks.append(tw_classes)
+    results = await gather(*tasks)
+    _,source_tree,source_context = await ingest_async(state['source_dir'])
+    _,app_tree,app_context = await ingest_async(state['app_dir'])
+    mapping = {class_name: result for class_name,result in zip(classes, results)}
+    state.update({
+        'source_tree': source_tree,
+        'app_tree': app_tree,
+        'source_context': source_context,
+        'app_context': app_context,
+        'css_state':mapping 
+    })            
+    return state
