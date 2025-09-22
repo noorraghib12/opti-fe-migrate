@@ -52,3 +52,18 @@ docker compose up --build -d
 ```
 - View logs: `docker compose logs -f`
 - Stop: `docker compose down`
+
+### Challenges Faced While Migrating to NextJS
+
+- CSS Migration:
+	- A lot of CSS classes did not have Tailwind CSS equivalents. As a result, we had to manually map the CSS classes to Tailwind CSS classes. This is specially true for the CSS classes that were used for dynamic styling, animations, and other complex styles like pseudo-elements and pseudo-classes.
+
+- JS Migration:
+	- JS migration was not as challenging as CSS migration. We had to manually map the JS functions to React functions. A simple prompt to the LLM was able to do the job quite well.
+
+- HTML Migration:
+	- HTML migration was relatively easy. Since plain HTML already works with NextJS, we didn't have to do much. But the agent really helped us to convert the raw HTML into reusable components, effectively reducing the amount of manual work required and helping with code splitting and optimization.
+
+Scenarios where change was very specific and involded 1-2 lines of code change required a lot of manual intervention, repetition and the agent was not able to handle it well.
+
+However, the agent was able to handle the majority of the migration tasks quite well, and we were able to migrate the entire application in a matter of hours. But, due to a large part of the migration tasks being automated, the agent was not able to replicate the exact level of quality and consistency in the migration tasks. But it got pretty close.
