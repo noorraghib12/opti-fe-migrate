@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --primary-grey:#e5e7eb;--primary-orange:#f97316;--primary-purple:#7c3aed;--secondary-amber:#fbbf24;--dark-bg:#1a0b2e;--darker-bg:#0f051a;--card-bg:rgba(229,231,235,0.03);--border-color:rgba(229,231,235,0.2);--text-primary:#ffffff;--text-secondary:#a1a1aa;--primary-cyan:#00ffff;--primary-pink:#ff00ff;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'JetBrains Mono','Fira Code',monospace;background:var(--darker-bg);color:var(--text-primary);line-height:1.6;overflow-x:hidden}
+
+/* Scroll animation helper */
+.fade-up{opacity:0;transform:translateY(50px);transition:all .8s cubic-bezier(0.25,0.1,0.25,1)}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+/* Keyframes required by arbitrary animate[...] classes */
+@keyframes gradientRotate{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.2)}100%{transform:rotate(360deg) scale(1)}}
+@keyframes gridMove{0%{transform:translate(0,0)}100%{transform:translate(50px,50px)}}
+@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(100px,-50px) scale(1.1)}66%{transform:translate(-50px,100px) scale(0.9)}}
+@keyframes scanline{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
+@keyframes float{0%{transform:translateY(100vh) translateX(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-100vh) translateX(100px);opacity:0}}
+@keyframes matrixFall{0%{transform:translateY(0)}100%{transform:translateY(200vh)}}
+@keyframes dataFlow{0%{width:0;opacity:0;transform:translateX(0)}50%{width:300px;opacity:.8}100%{width:0;opacity:0;transform:translateX(100vw)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeOut{0%{opacity:.7;transform:translateY(0)}100%{opacity:0;transform:translateY(-50px)}}
+@keyframes cyanPulse{0%,100%{filter:brightness(1) drop-shadow(0 0 15px rgba(0,255,255,.6));transform:translateY(0) scale(1)}50%{filter:brightness(1.1) drop-shadow(0 0 25px rgba(0,255,255,.8));transform:translateY(-2px) scale(1.01)}}
+@keyframes purplePulse{0%,100%{filter:brightness(1) drop-shadow(0 0 15px rgba(255,0,255,.6));transform:translateY(0) scale(1)}50%{filter:brightness(1.1) drop-shadow(0 0 25px rgba(255,0,255,.8));transform:translateY(-2px) scale(1.01)}}
+@keyframes glowPulse{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(.9)}50%{opacity:.8;transform:translate(-50%,-50%) scale(1)}}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+/* Added to support JS-triggered animation */
+@keyframes glitch1{0%{transform:translate(0,0)}20%{transform:translate(-2px,2px)}40%{transform:translate(2px,-2px)}60%{transform:translate(1px,1px)}80%{transform:translate(-1px,-1px)}100%{transform:translate(0,0)}}
+
+/* Optional: custom scrollbar for visual parity */
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--darker-bg)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--primary-cyan),var(--primary-pink));border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--primary-pink),var(--primary-cyan))}
