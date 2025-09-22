@@ -129,8 +129,8 @@ export default function EffectsClient(){
     }
 
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        const href = (this as HTMLAnchorElement).getAttribute('href');
+      anchor.addEventListener('click', function (this: HTMLAnchorElement, e: Event) {
+        const href = this.getAttribute('href');
         if (href && href.length>1){ e.preventDefault(); if (href === '#top'){ window.scrollTo({ top:0, behavior:'smooth' }); } else { const target = document.querySelector(href); if (target){ (target as HTMLElement).scrollIntoView({ behavior:'smooth', block:'start' }); } } }
       });
     });
@@ -142,10 +142,9 @@ export default function EffectsClient(){
 
     const observer = new IntersectionObserver((entries)=>{ entries.forEach(entry=>{ if (entry.isIntersecting){ entry.target.classList.add('visible'); } }); }, { threshold:0.1, rootMargin:'0px 0px -100px 0px' });
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
     document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
-      btn.addEventListener('mouseenter', function(){ (this as HTMLElement).style.boxShadow='0 0 30px rgba(0, 255, 255, 0.6)'; });
-      btn.addEventListener('mouseleave', function(){ (this as HTMLElement).style.boxShadow=''; });
+      btn.addEventListener('mouseenter', function(this: HTMLElement){ this.style.boxShadow='0 0 30px rgba(0, 255, 255, 0.6)'; });
+      btn.addEventListener('mouseleave', function(this: HTMLElement){ this.style.boxShadow=''; });
     });
 
     const animateStats = () => {
@@ -159,21 +158,50 @@ export default function EffectsClient(){
 
     const statsSection = document.querySelector('.stats');
     if (statsSection){ const so = new IntersectionObserver((entries)=>{ entries.forEach(entry=>{ if (entry.isIntersecting){ animateStats(); so.unobserve(entry.target); } }); }, { threshold:0.5 }); so.observe(statsSection); }
-
     document.querySelectorAll('.feature-card').forEach(card => {
-      card.addEventListener('mouseenter', function(){ (this as HTMLElement).style.animation = 'glitch1 0.3s ease-in-out'; setTimeout(()=>{ (this as HTMLElement).style.animation=''; }, 300); });
+      card.addEventListener('mouseenter', function(this: HTMLElement){ 
+        this.style.animation = 'glitch1 0.3s ease-in-out';
+        setTimeout(() => {
+          this.style.animation = '';
+        }, 300);
+      });
     });
 
     const cyberTexts = ['CONNECTING...','NEURAL LINK ESTABLISHED','QUANTUM SYNC ACTIVE','REALITY MATRIX LOADED'];
-    window.setInterval(()=>{
+    window.setInterval(() => {
       const randomText = cyberTexts[Math.floor(Math.random()*cyberTexts.length)];
       const temp = document.createElement('div'); temp.textContent=randomText; temp.style.cssText='position:fixed;color:var(--primary-cyan);font-size:.8rem;font-weight:700;z-index:1000;opacity:.7;pointer-events:none;animation:fadeOut 3s ease-out forwards;text-shadow:0 0 10px var(--primary-cyan);';
       temp.style.top = Math.random()*100 + 'vh'; temp.style.left = Math.random()*100 + 'vw';
       document.body.appendChild(temp); window.setTimeout(()=>{ temp.remove(); }, 3000);
     }, 5000);
-
     const submitBtn = document.querySelector('.btn-submit');
-    if (submitBtn){ submitBtn.addEventListener('click', function(e){ e.preventDefault(); const name=(document.getElementById('name') as HTMLInputElement)?.value; const email=(document.getElementById('email') as HTMLInputElement)?.value; const message=(document.getElementById('message') as HTMLTextAreaElement)?.value; if (name && email && message){ const btn = this as HTMLElement; btn.textContent='TRANSMITTING...'; (btn as HTMLElement).setAttribute('style','background:linear-gradient(135deg,var(--primary-cyan),var(--primary-pink))'); window.setTimeout(()=>{ btn.textContent='TRANSMISSION COMPLETE'; (btn as HTMLElement).setAttribute('style','background:var(--primary-cyan)'); (document.getElementById('name') as HTMLInputElement).value=''; (document.getElementById('email') as HTMLInputElement).value=''; (document.getElementById('message') as HTMLTextAreaElement).value=''; window.setTimeout(()=>{ btn.textContent='Transmit Message'; (btn as HTMLElement).setAttribute('style',''); },3000); },2000); } }); }
+    if (submitBtn) {
+      submitBtn.addEventListener('click', function(this: HTMLElement, e) { 
+        e.preventDefault();
+        const name = (document.getElementById('name') as HTMLInputElement)?.value;
+        const email = (document.getElementById('email') as HTMLInputElement)?.value;
+        const message = (document.getElementById('message') as HTMLTextAreaElement)?.value;
+        
+        if (name && email && message) {
+          const btn = this;
+          btn.textContent = 'TRANSMITTING...';
+          btn.setAttribute('style', 'background:linear-gradient(135deg,var(--primary-cyan),var(--primary-pink))');
+          
+          window.setTimeout(() => {
+            btn.textContent = 'TRANSMISSION COMPLETE';
+            btn.setAttribute('style', 'background:var(--primary-cyan)');
+            (document.getElementById('name') as HTMLInputElement).value = '';
+            (document.getElementById('email') as HTMLInputElement).value = '';
+            (document.getElementById('message') as HTMLTextAreaElement).value = '';
+            
+            window.setTimeout(() => {
+              btn.textContent = 'Transmit Message';
+              btn.setAttribute('style', '');
+            }, 3000);
+          }, 2000);
+        }
+      });
+    }
 
   }, []);
   return null;
