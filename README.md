@@ -56,6 +56,8 @@ Sample migrations of pages in ```template_pages``` can be found in ```target_mig
 
 ## Project Migration Process
 
+The page that was migrated was [templatemo_594_nexus_flow](https://templatemo.com/tm-594-nexus-flow)
+
 The initial migration focused on the template **templatemo_594_nexus_flow_v1**, converting its HTML/CSS/JS files into a Next.js structure under src. The agentic workflow:
 
 - Analyzed the source directory structure and CSS classes.
@@ -67,7 +69,7 @@ The initial migration focused on the template **templatemo_594_nexus_flow_v1**, 
 
 ## Frontend Setup & Development
 
-Once, the agentic workflow was carried out, the generated project was edited and corrected by a frontend engineer within 4 hours and was moved to ```src``` and ```public``` and can be launched with docker compose.
+Once, the agentic workflow was carried out, the generated project was edited and corrected by a frontend engineer within 4 hours and was moved to ```src``` and ```public``` and can be launched with npm/docker/docker compose.
 
 
 
