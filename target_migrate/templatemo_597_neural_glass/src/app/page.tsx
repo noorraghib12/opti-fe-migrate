@@ -23,10 +23,10 @@ const HomePage: React.FC = () => {
       let currentSection = '';
       const scrollPos = window.pageYOffset + 100;
       sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
+        const sectionTop = (section as HTMLElement).offsetTop;
+        const sectionHeight = (section as HTMLElement).offsetHeight;
         if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-          currentSection = section.getAttribute('id') || '';
+          currentSection = (section as HTMLElement).getAttribute('id') || '';
         }
       });
       navLinks.forEach(link => {

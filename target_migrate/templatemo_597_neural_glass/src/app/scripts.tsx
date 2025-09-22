@@ -90,10 +90,10 @@ const useActiveMenuItemHighlight = () => {
       const scrollPos = window.pageYOffset + 100;
 
       sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
+        const sectionTop = (section as HTMLElement).offsetTop;
+        const sectionHeight = (section as HTMLElement).offsetHeight;
         if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-          currentSection = section.getAttribute('id') || '';
+          currentSection = (section as HTMLElement).getAttribute('id') || '';
         }
       });
 
@@ -123,7 +123,7 @@ const useParallaxEffect = () => {
 
       shapes.forEach((shape, index) => {
         const speed = (index + 1) * 0.3;
-        shape.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
+        (shape as HTMLElement).style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
       });
     };
 
@@ -140,11 +140,11 @@ const useNeuralLinesPulseEffect = () => {
     const pulseEffect = setInterval(() => {
       neuralLines.forEach((line, index) => {
         setTimeout(() => {
-          line.style.opacity = '1';
-          line.style.transform = 'scaleX(1.2)';
+          (line as HTMLElement).style.opacity = '1';
+          (line as HTMLElement).style.transform = 'scaleX(1.2)';
           setTimeout(() => {
-            line.style.opacity = '0.2';
-            line.style.transform = 'scaleX(0.5)';
+            (line as HTMLElement).style.opacity = '0.2';
+            (line as HTMLElement).style.transform = 'scaleX(0.5)';
           }, 200);
         }, index * 300);
       });
@@ -158,16 +158,16 @@ const useQuantumParticleGeneration = () => {
   useEffect(() => {
     const createQuantumParticle = () => {
       const particle = document.createElement('div');
-      particle.style.position = 'fixed';
+      (particle as HTMLElement).style.position = 'fixed';
       particle.style.width = Math.random() * 4 + 1 + 'px';
-      particle.style.height = particle.style.width;
-      particle.style.background = ['#00ffff', '#ff0080', '#8000ff'][Math.floor(Math.random() * 3)];
-      particle.style.borderRadius = '50%';
+      (particle as HTMLElement).style.height = (particle as HTMLElement).style.width;
+      (particle as HTMLElement).style.background = ['#00ffff', '#ff0080', '#8000ff'][Math.floor(Math.random() * 3)];
+      (particle as HTMLElement).style.borderRadius = '50%';
       particle.style.left = Math.random() * 100 + '%';
       particle.style.top = '100vh';
       particle.style.pointerEvents = 'none';
       particle.style.zIndex = '-1';
-      particle.style.boxShadow = `0 0 10px ${particle.style.background}`;
+      particle.style.boxShadow = `0 0 10px ${particle.style.background as string}`;
 
       document.body.appendChild(particle);
 
@@ -199,17 +199,17 @@ const useIntersectionObserverAnimations = () => {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
+          (entry.target as HTMLElement).style.opacity = '1';
+          (entry.target as HTMLElement).style.transform = 'translateY(0)';
         }
       });
     }, observerOptions);
 
     const elements = document.querySelectorAll('.timeline-content, .hexagon');
     elements.forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(50px)';
-      el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+      (el as HTMLElement).style.opacity = '0';
+      (el as HTMLElement).style.transform = 'translateY(50px)';
+      (el as HTMLElement).style.transition = 'opacity 0.8s ease, transform 0.8s ease';
       observer.observe(el);
     });
 
@@ -225,16 +225,16 @@ const useFormSubmissionEffect = () => {
     const handleSubmit = (e: Event) => {
       e.preventDefault();
       if (submitButton) {
-        submitButton.innerHTML = 'TRANSMITTING...';
-        submitButton.style.background = 'linear-gradient(45deg, #8000ff, #00ffff)';
+        (submitButton as HTMLElement).innerHTML = 'TRANSMITTING...';
+        (submitButton as HTMLElement).style.background = 'linear-gradient(45deg, #8000ff, #00ffff)';
 
         setTimeout(() => {
-          submitButton.innerHTML = 'TRANSMISSION COMPLETE';
-          submitButton.style.background = 'linear-gradient(45deg, #00ff00, #00ffff)';
+          (submitButton as HTMLElement).innerHTML = 'TRANSMISSION COMPLETE';
+          (submitButton as HTMLElement).style.background = 'linear-gradient(45deg, #00ff00, #00ffff)';
 
           setTimeout(() => {
-            submitButton.innerHTML = 'TRANSMIT TO MATRIX';
-            submitButton.style.background = 'linear-gradient(45deg, #00ffff, #ff0080)';
+            (submitButton as HTMLElement).innerHTML = 'TRANSMIT TO MATRIX';
+            (submitButton as HTMLElement).style.background = 'linear-gradient(45deg, #00ffff, #ff0080)';
           }, 2000);
         }, 1500);
       }
