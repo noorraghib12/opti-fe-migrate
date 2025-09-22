@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* Keyframes used by legacy/dynamic animations to guarantee availability */
 @layer utilities {

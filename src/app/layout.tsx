@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Fira_Code } from "next/font/google";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -12,6 +13,11 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+const firaCode = Fira_Code({
+  subsets: ["latin"],
+  display: "swap",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -19,11 +25,9 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body id="top" className="min-h-screen bg-[#0f051a] text-white antialiased">
+      <body id="top" className={`${firaCode.className} min-h-screen text-white antialiased`}>
         {children}
       </body>
     </html>
