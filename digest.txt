@@ -1,0 +1,65 @@
+Directory structure:
+└── agent/
+    ├── nodes.py
+    └── tools.py
+
+================================================
+FILE: nodes.py
+================================================
+import docker
+def agent_execute_code_in_docker(state: AgentState):
+    print(colored("DEBUG: Running code in Docker...", "magenta"))
+    # print(colored(f"DEBUG: Final Python Code to run: {state['extracted_python_code']}", "cyan"))
+
+    
+
+    try:
+        container_output = client.containers.run(
+            image="python:3.9-slim",
+            command=f"python {os.path.basename(temp_code_filename)}",
+            volumes={os.path.dirname(temp_code_filename): {'bind': '/usr/src/app', 'mode': 'rw'}},
+            working_dir="/usr/src/app",
+            remove=True,
+            stdout=True,
+            stderr=True
+        )
+        state["final_output"] = container_output.decode('utf-8')
+        # print(colored("DEBUG: Docker Output:", "cyan"), state["final_output"])
+    except docker.errors.ContainerError as e:
+        print(colored(f"ERROR: Error running code in container: {str(e)}", "red"))
+    
+    os.remove(temp_code_filename)
+
+    print(colored("DEBUG: agent_execute_code_in_docker state", "magenta"))
+    pretty_print_state_enhanced(state)
+
+    return state
+
+
+================================================
+FILE: tools.py
+================================================
+
+import glob
+import os
+from pydantic import BaseModel, Field
+from langchain_community.agent_toolkits import FileManagementToolkit
+from langchain_core.tools import tool
+
+
+toolkit = FileManagementToolkit(
+    root_dir='..',
+    selected_tools=['list_directories', 'read_file', 'write_file', 'delete_file','file_search', 'move_file', 'copy_file']
+)  # If you don't provide a root_dir, operations will default to the current working directory
+
+class ListFiles(BaseModel):
+    path: str = Field(..., description="Path of the directory to list directories from")
+
+
+@tool("list_directories", return_direct=True)
+def walk_directory(path: str) -> str:
+    return glob.glob(path + '/**', recursive=True)
+
+
+
+
