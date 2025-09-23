@@ -40,7 +40,7 @@ def main():
     st.sidebar.write("""
     
     1. Add the vanilla HTML/CSS/JS template to the root of the project directory.
-    2. Provide the **source directory** name where your template is located.
+    2. Provide the **source directory** name or relative path to where your template is located.
     3. The **target directory** will be automatically set to `target_migrate`.
     4. Click the **Start Migration** button to begin the migration process.
     5. Monitor the progress and status updates in real-time.
@@ -52,7 +52,7 @@ def main():
     st.write("Migrate your vanilla HTML/CSS/JS template to a Next.js App Router project with TypeScript and Tailwind CSS.")
 
     with st.form("migration_form"):
-        source_dir = st.text_input("Source Directory", placeholder="Enter the source directory name")
+        source_dir = st.text_input("Source Directory", placeholder="Enter the source directory name or relative path")
         target_dir = "target_migrate"  # Fixed target directory
         submit_button = st.form_submit_button("Start Migration")
 
